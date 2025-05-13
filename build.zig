@@ -304,7 +304,7 @@ pub fn build(b: *std.Build) void {
     const test_step = b.step("test", "Run tests");
 
     {
-        // elftest64
+        // elf64 test
         const run_nasm = b.addRunArtifact(nasm);
         test_step.dependOn(&run_nasm.step);
         run_nasm.addArg("-f");
@@ -331,13 +331,13 @@ pub fn build(b: *std.Build) void {
         });
 
         const run_elftest64 = b.addRunArtifact(elftest64);
+        run_elftest64.skip_foreign_checks = true;
         run_elftest64.addCheck(.{ .expect_stdout_match = elftest64_output });
-        run_elftest64.failing_to_execute_foreign_is_an_error = false;
         test_step.dependOn(&run_elftest64.step);
     }
 
     {
-        // cofftest
+        // coff test
         const run_nasm = b.addRunArtifact(nasm);
         test_step.dependOn(&run_nasm.step);
         run_nasm.addArg("-f");
@@ -364,8 +364,8 @@ pub fn build(b: *std.Build) void {
         });
 
         const run_cofftest = b.addRunArtifact(cofftest);
+        run_cofftest.skip_foreign_checks = true;
         run_cofftest.addCheck(.{ .expect_stdout_match = cofftest_output });
-        run_cofftest.failing_to_execute_foreign_is_an_error = true;
         test_step.dependOn(&run_cofftest.step);
     }
 }
