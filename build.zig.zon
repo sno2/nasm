@@ -1,6 +1,6 @@
 .{
     .name = .nasm,
-    .version = "0.0.0",
+    .version = "2.16.3",
     .fingerprint = 0x84b9c9eba567f307, // Changing this has security and trust implications.
     .minimum_zig_version = "0.14.0",
     .dependencies = .{
@@ -14,6 +14,5 @@
         "build.zig",
         "LICENSE",
         "README.md",
-        "src",
     },
 }
