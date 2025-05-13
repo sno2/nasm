@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: mlugg/setup-zig@v2
+        with:
+          version: latest
+
+      - name: Check Formatting
+        run: zig fmt --ast-check --check .
+
+      - name: Build (windows-x86_64)
+        run: zig build -Dtarget=x86_64-windows-gnu
+
+      - name: Build (windows-x86_64, ReleaseFast)
+        run: zig build -Dtarget=x86_64-windows-gnu -Doptimize=ReleaseFast
+
+      - name: Build (windows-aarch64)
+        run: zig build -Dtarget=aarch64-windows-gnu
+
+      - name: Build (windows-x86)
+        run: zig build -Dtarget=x86-windows-gnu
+
+      - name: Build (macos-x86_64)
+        run: zig build -Dtarget=x86_64-macos-none
+
+      - name: Build (macos-aarch64)
+        run: zig build -Dtarget=aarch64-macos-none
+
+      - name: Build (macos-aarch64, ReleaseFast)
+        run: zig build -Dtarget=aarch64-macos-none -Doptimize=ReleaseFast
+
+      - name: Build (linux-x86_64)
+        run: zig build -Dtarget=x86_64-linux-musl
+
+      - name: Build (linux-x86_64, ReleaseFast)
+        run: zig build -Dtarget=x86_64-linux-musl -Doptimize=ReleaseFast
+
+      - name: Build (linux-aarch64)
+        run: zig build -Dtarget=aarch64-linux-musl
+
+      - name: Build (linux-arm)
+        run: zig build -Dtarget=arm-linux-musleabihf
+
+      - name: Build (linux-riscv64)
+        run: zig build -Dtarget=riscv64-linux-musl
+
+      - name: Build (linux-powerpc64le)
+        run: zig build -Dtarget=powerpc64le-linux-musl
+
+      - name: Build (linux-x86)
+        run: zig build -Dtarget=x86-linux-musl
+
+      - name: Build (linux-loongarch64)
+        run: zig build -Dtarget=loongarch64-linux-musl
+
+      - name: Build (linux-s390x)
+        run: zig build -Dtarget=s390x-linux-musl
+
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: mlugg/setup-zig@v2
+        with:
+          version: latest
+
+      - name: Test
+        run: zig build test
+
+      - name: Test (sanitize_thread)
+        if: matrix.os != 'windows-latest'
+        run: zig build test -Dsanitize_thread

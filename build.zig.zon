@@ -1,0 +1,19 @@
+.{
+    .name = .nasm,
+    .version = "0.0.0",
+    .fingerprint = 0x84b9c9eba567f307, // Changing this has security and trust implications.
+    .minimum_zig_version = "0.14.0",
+    .dependencies = .{
+        .nasm = .{
+            .url = "https://nasm.us/pub/nasm/releasebuilds/2.16.03/nasm-2.16.03.tar.gz",
+            .hash = "N-V-__8AAOdiwQAcuTPO3dqgQrt8BtvnkUYJ1Z5tP5qQOphI",
+        },
+    },
+    .paths = .{
+        "build.zig.zon",
+        "build.zig",
+        "LICENSE",
+        "README.md",
+        "src",
+    },
+}
