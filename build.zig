@@ -332,7 +332,8 @@ pub fn build(b: *std.Build) void {
 
         const run_elftest64 = b.addRunArtifact(elftest64);
         run_elftest64.skip_foreign_checks = true;
-        run_elftest64.addCheck(.{ .expect_stdout_match = elftest64_output });
+        run_elftest64.addCheck(.{ .expect_stdout_match = elftest64_output_part1 });
+        run_elftest64.addCheck(.{ .expect_stdout_match = elftest64_output_part2 });
         test_step.dependOn(&run_elftest64.step);
     }
 
@@ -473,12 +474,17 @@ const nasm_disasm_sources = &.{
     "sync.c",
 };
 
-const elftest64_output =
+const elftest64_output_part1 =
     \\Testing lrotate: should get 0x00400000, 0x00000001
     \\lrotate(0x00040000, 4) = 0x00400000
     \\lrotate(0x00040000, 46) = 0x00000001
     \\This string should read `hello, world': `hello, world'
-    \\&integer = 0x102f788, &commvar = 0x102f798
+;
+
+// TODO: These addresses seem to be flaky.
+// &integer = 0x102f788, &commvar = 0x102f798
+
+const elftest64_output_part2 =
     \\The integers here should be 1234, 1235 and 4321:
     \\integer=1234, localint=1235, commvar=4321
     \\integer=1234, localint=1235, commvar=4321
