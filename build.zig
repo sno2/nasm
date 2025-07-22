@@ -139,7 +139,7 @@ pub fn build(b: *std.Build) void {
         .HAVE_STRICMP = null,
         .HAVE_STRINGS_H = true,
         .HAVE_STRING_H = true,
-        .HAVE_STRLCPY = if (target.result.os.tag != .windows) true else null,
+        .HAVE_STRLCPY = if (target.result.os.tag != .windows and (target.result.os.tag != .linux or !target.result.abi.isGnu())) true else null,
         .HAVE_STRNCASECMP = true,
         .HAVE_STRNICMP = null,
         .HAVE_STRNLEN = true,
