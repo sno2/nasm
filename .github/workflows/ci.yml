@@ -39,7 +39,9 @@ jobs:
       - run: zig build -Dtarget=loongarch64-linux-musl
       - run: zig build -Dtarget=s390x-linux-musl
       - run: zig build -Dtarget=wasm32-wasi -Doptimize=ReleaseFast # ubsan rt fails to build in Debug
-      - run: zig build -Dtarget=x86_64-linux-gnu 
+      - run: zig build -Dtarget=x86_64-linux-gnu
+      - run: zig build -Dtarget=x86-linux-gnu
+      - run: zig build -Dtarget=aarch64-linux-gnu
 
   test:
     strategy:
