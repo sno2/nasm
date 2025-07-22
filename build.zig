@@ -215,7 +215,7 @@ pub fn build(b: *std.Build) void {
         ._ALL_SOURCE = null,
         ._DARWIN_C_SOURCE = null,
         .__EXTENSIONS__ = null,
-        ._GNU_SOURCE = null,
+        ._GNU_SOURCE = target.result.abi.isGnu(),
         ._HPUX_ALT_XOPEN_SOCKET_API = null,
         ._MINIX = null,
         ._NETBSD_SOURCE = null,
