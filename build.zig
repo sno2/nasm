@@ -120,7 +120,7 @@ pub fn build(b: *std.Build) void {
         .HAVE_ISASCII = true,
         .HAVE_ISCNTRL = true,
         .HAVE_MACHINE_ENDIAN_H = if (target.result.os.tag.isDarwin()) true else null,
-        .HAVE_MEMPCPY = if (target.result.abi.isGnu()) true else null,
+        .HAVE_MEMPCPY = if (target.result.abi.isGnu() or (!target.result.os.tag.isDarwin() and target.result.os.tag.isBSD())) true else null,
         .HAVE_MEMPSET = null,
         .HAVE_MINIX_CONFIG_H = null,
         .HAVE_MMAP = if (target.result.os.tag != .windows and target.result.os.tag != .wasi) true else null,

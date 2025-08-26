@@ -42,6 +42,8 @@ jobs:
       - run: zig build -Dtarget=x86_64-linux-gnu
       - run: zig build -Dtarget=x86-linux-gnu
       - run: zig build -Dtarget=aarch64-linux-gnu
+      - run: zig build -Dtarget=x86_64-freebsd-none
+      - run: zig build -Dtarget=aarch64-freebsd-none
 
   test:
     strategy:
