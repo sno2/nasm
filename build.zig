@@ -9,6 +9,7 @@ pub fn build(b: *std.Build) void {
 
     const upstream = b.dependency("nasm", .{});
 
+    const have_htole = if (target.result.os.tag != .windows and !target.result.os.tag.isDarwin()) true else null;
     const config = b.addConfigHeader(.{
         .include_path = "config/config.h",
         .style = .{ .autoconf_undef = upstream.path("config/config.h.in") },
@@ -16,11 +17,8 @@ pub fn build(b: *std.Build) void {
         .ABORT_ON_PANIC = null,
         .AC_APPLE_UNIVERSAL_BUILD = null,
         .CFLAGS_FDATA_SECTIONS = true,
-        .CFLAGS_FFAT_LTO_OBJECTS = null,
         .CFLAGS_FFUNCTION_SECTIONS = true,
         .CFLAGS_FGNU89_INLINE = null,
-        .CFLAGS_FLTO = null,
-        .CFLAGS_FLTO_AUTO = null,
         .CFLAGS_FNO_COMMON = true,
         .CFLAGS_FNO_OMIT_FRAME_POINTER = null,
         .CFLAGS_FSANITIZE_ADDRESS = sanitize_thread,
@@ -34,7 +32,6 @@ pub fn build(b: *std.Build) void {
         .CFLAGS_OG = null,
         .CFLAGS_PEDANTIC = true,
         .CFLAGS_PG = null,
-        .CFLAGS_U_STRICT_ANSI = true,
         .CFLAGS_W = true,
         .CFLAGS_WALL = true,
         .CFLAGS_WERROR = null,
@@ -60,9 +57,6 @@ pub fn build(b: *std.Build) void {
         .CFLAGS_WSUGGEST_ATTRIBUTE_MALLOC = null,
         .CFLAGS_WSUGGEST_ATTRIBUTE_NORETURN = null,
         .CFLAGS_WSUGGEST_ATTRIBUTE_PURE = null,
-        .CPPFLAGS_STD_C11 = null,
-        .CPPFLAGS_STD_C17 = true,
-        .CPPFLAGS_STD_C99 = null,
         .CPPFLAGS_WERROR_ATTRIBUTES = true,
         .HAVE_ACCESS = true,
         .HAVE_CANONICALIZE_FILE_NAME = null,
@@ -84,9 +78,6 @@ pub fn build(b: *std.Build) void {
         .HAVE_FSEEKO = true,
         .HAVE_FSTAT = true,
         .HAVE_FTRUNCATE = true,
-        .HAVE_FUNC_ATTRIBUTE1_ALLOC_SIZE = true,
-        .HAVE_FUNC_ATTRIBUTE2_ALLOC_SIZE = true,
-        .HAVE_FUNC_ATTRIBUTE3_FORMAT = true,
         .HAVE_FUNC_ATTRIBUTE_COLD = true,
         .HAVE_FUNC_ATTRIBUTE_CONST = true,
         .HAVE_FUNC_ATTRIBUTE_ERROR = true,
@@ -96,9 +87,6 @@ pub fn build(b: *std.Build) void {
         .HAVE_FUNC_ATTRIBUTE_RETURNS_NONNULL = true,
         .HAVE_FUNC_ATTRIBUTE_SENTINEL = true,
         .HAVE_FUNC_ATTRIBUTE_UNUSED = true,
-        .HAVE_FUNC_PTR_ATTRIBUTE1_ALLOC_SIZE = true,
-        .HAVE_FUNC_PTR_ATTRIBUTE2_ALLOC_SIZE = true,
-        .HAVE_FUNC_PTR_ATTRIBUTE3_FORMAT = true,
         .HAVE_FUNC_PTR_ATTRIBUTE_COLD = null,
         .HAVE_FUNC_PTR_ATTRIBUTE_CONST = true,
         .HAVE_FUNC_PTR_ATTRIBUTE_MALLOC = null,
@@ -111,9 +99,9 @@ pub fn build(b: *std.Build) void {
         .HAVE_GETPAGESIZE = if (target.result.os.tag != .windows) true else null,
         .HAVE_GETRLIMIT = true,
         .HAVE_GETUID = true,
-        .HAVE_HTOLE16 = true,
-        .HAVE_HTOLE32 = true,
-        .HAVE_HTOLE64 = true,
+        .HAVE_HTOLE16 = have_htole,
+        .HAVE_HTOLE32 = have_htole,
+        .HAVE_HTOLE64 = have_htole,
         .HAVE_INTRIN_H = null,
         .HAVE_INTTYPES_H = true,
         .HAVE_IO_H = null,
@@ -175,15 +163,11 @@ pub fn build(b: *std.Build) void {
         .HAVE__FSTATI64 = null,
         .HAVE__FULLPATH = null,
         .HAVE__STATI64 = null,
-        .HAVE___BSWAP_16 = true,
-        .HAVE___BSWAP_32 = true,
-        .HAVE___BSWAP_64 = true,
         .HAVE___BUILTIN_BSWAP16 = true,
         .HAVE___BUILTIN_BSWAP32 = true,
         .HAVE___BUILTIN_BSWAP64 = true,
         .HAVE___BUILTIN_CHOOSE_EXPR = true,
         .HAVE___BUILTIN_CLZ = true,
-        .HAVE___BUILTIN_CLZL = true,
         .HAVE___BUILTIN_CLZLL = true,
         .HAVE___BUILTIN_CONSTANT_P = true,
         .HAVE___BUILTIN_EXPECT = true,
@@ -232,6 +216,53 @@ pub fn build(b: *std.Build) void {
         .__STDC_WANT_MATH_SPEC_FUNCS__ = null,
         ._TANDEM_SOURCE = null,
         ._XOPEN_SOURCE = null,
+        // New in 3.01
+        .CFLAGS_STD_C11 = null,
+        .CFLAGS_STD_C17 = null,
+        .CFLAGS_STD_C23 = null,
+        .CFLAGS_STD_C99 = null,
+        .CFLAGS_U_STRICT_ANSI_ = null,
+        .HAVE_ARPA_INET_H = null,
+        .HAVE_BSWAP_16 = null,
+        .HAVE_BSWAP_32 = null,
+        .HAVE_BSWAP_64 = null,
+        .HAVE_BYTESWAP_H = null,
+        .HAVE_CPU_TO_BE16 = null,
+        .HAVE_CPU_TO_BE32 = null,
+        .HAVE_CPU_TO_BE64 = null,
+        .HAVE_FUNC_ATTRIBUTE_1_ALLOC_SIZE = null,
+        .HAVE_FUNC_ATTRIBUTE_2_ALLOC_SIZE = null,
+        .HAVE_FUNC_ATTRIBUTE_3_FORMAT = null,
+        .HAVE_FUNC_ATTRIBUTE_MAYBE_UNUSED = null,
+        .HAVE_FUNC_ATTRIBUTE_REPRODUCIBLE = null,
+        .HAVE_FUNC_ATTRIBUTE_UNSEQUENCED = null,
+        .HAVE_FUNC_NAME = null,
+        .HAVE_FUNC_PTR_ATTRIBUTE_1_ALLOC_SIZE = null,
+        .HAVE_FUNC_PTR_ATTRIBUTE_2_ALLOC_SIZE = null,
+        .HAVE_FUNC_PTR_ATTRIBUTE_3_FORMAT = null,
+        .HAVE_FUNC_PTR_ATTRIBUTE_MAYBE_UNUSED = null,
+        .HAVE_FUNC_PTR_ATTRIBUTE_REPRODUCIBLE = null,
+        .HAVE_FUNC_PTR_ATTRIBUTE_UNSEQUENCED = null,
+        .HAVE_HTOBE16 = null,
+        .HAVE_HTOBE32 = null,
+        .HAVE_HTOBE64 = null,
+        .HAVE_HTONL = null,
+        .HAVE_HTONQ = null,
+        .HAVE_HTONS = null,
+        .HAVE_STDBIT_H = null,
+        .HAVE_STDC_LEADING_ZEROS = null,
+        .HAVE_UINTMAX_T = null,
+        .HAVE_UNSIGNED_LONG_LONG_INT = null,
+        .HAVE_VARADIC_MACROS_COMMA_HACK = null,
+        .HAVE___BUILTIN_PREFETCH = null,
+        .HAVE___CPU_TO_BE16 = null,
+        .HAVE___CPU_TO_BE64 = null,
+        .__STDC_WANT_IEC_60559_EXT__ = null,
+        ._FLTO_AUTO_FLTO = null,
+        ._TIME_BITS = null,
+        .__MINGW_USE_VC2005_COMPAT = null,
+        .__func__ = null,
+        .uintmax_t = null,
     });
 
     const mod_options: std.Build.Module.CreateOptions = .{
@@ -282,9 +313,23 @@ pub fn build(b: *std.Build) void {
     b.installArtifact(nasm);
     for (include_paths) |path| nasm.addIncludePath(path);
     nasm.linkLibrary(nasm_common);
+    nasm.addIncludePath(upstream.path("zlib"));
     nasm.addCSourceFiles(.{
         .root = upstream.path("asm"),
         .files = nasm_asm_sources,
+        .flags = flags,
+    });
+    nasm.addCSourceFiles(.{
+        .root = upstream.path("zlib"),
+        .files = &.{
+            "adler32.c",
+            "crc32.c",
+            "infback.c",
+            "inffast.c",
+            "inflate.c",
+            "inftrees.c",
+            "zutil.c",
+        },
         .flags = flags,
     });
 
@@ -376,7 +421,7 @@ const nasm_common_sources = &.{
     "nasmlib/asprintf.c",
     "nasmlib/badenum.c",
     "nasmlib/bsi.c",
-    "nasmlib/crc32.c",
+    "nasmlib/crc32b.c",
     "nasmlib/crc64.c",
     // "nasmlib/errfile.c", -- this defines a duplicate symbol
     "nasmlib/file.c",
@@ -400,7 +445,6 @@ const nasm_common_sources = &.{
     "nasmlib/ver.c",
     "nasmlib/zerobuf.c",
 
-    "x86/disp8.c",
     "x86/iflag.c",
     "x86/insnsa.c",
     "x86/insnsb.c",
@@ -422,7 +466,6 @@ const nasm_common_sources = &.{
     "macros/macros.c",
 
     "output/codeview.c",
-    "output/legacy.c",
     "output/nulldbg.c",
     "output/nullout.c",
     "output/outaout.c",
@@ -440,6 +483,7 @@ const nasm_common_sources = &.{
     // ndisasm also needs these:
     "asm/error.c",
     "asm/warnings.c",
+    "asm/getbool.c",
 };
 
 const nasm_asm_sources = &.{
@@ -464,6 +508,7 @@ const nasm_asm_sources = &.{
     "stdscan.c",
     "strfunc.c",
     "tokhash.c",
+    "uncompress.c",
     // "warnings.c", -- included in nasm_common
     "nasm.c",
 };
@@ -472,6 +517,7 @@ const nasm_disasm_sources = &.{
     "disasm.c",
     "ndisasm.c",
     "sync.c",
+    "prefix.c",
 };
 
 const elftest64_output_part1 =
