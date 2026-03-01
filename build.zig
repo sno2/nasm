@@ -311,15 +311,15 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(mod_options),
     });
     b.installArtifact(nasm);
-    for (include_paths) |path| nasm.addIncludePath(path);
-    nasm.linkLibrary(nasm_common);
-    nasm.addIncludePath(upstream.path("zlib"));
-    nasm.addCSourceFiles(.{
+    for (include_paths) |path| nasm.root_module.addIncludePath(path);
+    nasm.root_module.linkLibrary(nasm_common);
+    nasm.root_module.addIncludePath(upstream.path("zlib"));
+    nasm.root_module.addCSourceFiles(.{
         .root = upstream.path("asm"),
         .files = nasm_asm_sources,
         .flags = flags,
     });
-    nasm.addCSourceFiles(.{
+    nasm.root_module.addCSourceFiles(.{
         .root = upstream.path("zlib"),
         .files = &.{
             "adler32.c",
@@ -338,9 +338,9 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(mod_options),
     });
     b.installArtifact(ndisasm);
-    for (include_paths) |path| ndisasm.addIncludePath(path);
-    ndisasm.linkLibrary(nasm_common);
-    ndisasm.addCSourceFiles(.{
+    for (include_paths) |path| ndisasm.root_module.addIncludePath(path);
+    ndisasm.root_module.linkLibrary(nasm_common);
+    ndisasm.root_module.addCSourceFiles(.{
         .root = upstream.path("disasm"),
         .files = nasm_disasm_sources,
         .flags = flags,
@@ -369,8 +369,8 @@ pub fn build(b: *std.Build) void {
                 .link_libc = true,
             }),
         });
-        elftest64.addObjectFile(object_file);
-        elftest64.addCSourceFile(.{
+        elftest64.root_module.addObjectFile(object_file);
+        elftest64.root_module.addCSourceFile(.{
             .file = upstream.path("test/elftest64.c"),
             .flags = &.{"-std=c17"},
         });
@@ -403,8 +403,8 @@ pub fn build(b: *std.Build) void {
                 .link_libc = true,
             }),
         });
-        cofftest.addObjectFile(object_file);
-        cofftest.addCSourceFile(.{
+        cofftest.root_module.addObjectFile(object_file);
+        cofftest.root_module.addCSourceFile(.{
             .file = upstream.path("test/cofftest.c"),
             .flags = &.{"-std=c17"},
         });

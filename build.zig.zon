@@ -2,7 +2,7 @@
     .name = .nasm,
     .version = "3.0.1",
     .fingerprint = 0x84b9c9eba567f307, // Changing this has security and trust implications.
-    .minimum_zig_version = "0.14.0",
+    .minimum_zig_version = "0.15.0",
     .dependencies = .{
         .nasm = .{
             .url = "https://www.nasm.us/pub/nasm/releasebuilds/3.01/nasm-3.01.tar.gz",
